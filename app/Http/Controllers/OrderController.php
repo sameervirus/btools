@@ -15,6 +15,10 @@ use App\Http\Resources\MoveResources;
 use App\Http\Resources\MoveItemResources;
 
 use App\Http\Controllers\TransferHeaderController;
+use App\Http\Resources\DetailMoveResources;
+use App\Http\Resources\StockResources;
+use App\Models\Category;
+use App\Models\TransferDetails;
 
 class OrderController extends Controller
 {
@@ -35,6 +39,26 @@ class OrderController extends Controller
         $moves = MoveResources::collection(TransferHeader::orderBy('trans_date', 'desc')->take(500)->get());
 
         return response()->json(compact('clients', 'warehouses', 'transfers', 'moves'), 200);
+    }
+
+    public function storage()
+    {
+        $categories = Category::orderBy('name')->get();
+        $warehouses = Warehouse::orderBy('name')->get();
+        $storage = StockResources::collection(Item::with('warehouses')->get());
+
+        return response()->json(compact('categories', 'warehouses', 'storage'), 200);
+    }
+
+    public function item($code = null)
+    {
+        if(!$code) return [];
+
+        $item = new StockResources(Item::where('code', $code)->first());
+
+        $moves = DetailMoveResources::collection(TransferDetails::with('header')->where('item_id', $item->id)->get());
+
+        return response()->json(compact('item', 'moves'), 200);
     }
 
     public function move(Request $request, $id=null)
@@ -104,48 +128,8 @@ class OrderController extends Controller
 
         return response()->json(['success' => 'success'], 200);
     } 
-    
-    
-    public function purchase(Request $request)
-    {
-        
 
-        
-
-        
-    }
-
-    public function transfer(Request $request)
-    {
-        $request->validate([
-            'from_warehouse' => 'required',
-            'warehouse' => 'required',
-            'trans_no' => 'required|unique:transfer_headers',
-            'trans_date' => 'required',
-            'selectedItems' => 'required'
-        ]);
-
-        $store = new TransferHeaderController();
-        $store->addTrans(
-            $request->trans_no, 
-            $request->trans_date, 
-            $request->totalQty, 
-            $request->totalPrice, 
-            $request->comments, 
-            0, 
-            $request->trans_date, 
-            $request->from_warehouse,
-            $request->warehouse, 
-            2, 
-            auth()->user()->id, 
-            0, 
-            $request->selectedItems
-        );
-
-        return response()->json(['success' => 'success'], 200);
-    }
-
-    public function item($no = null)
+    public function trans($no = null)
     {
         if(!$no) return [];
         $item = new MoveItemResources(TransferHeader::with('details')->where('trans_no', $no)->firstOrFail());

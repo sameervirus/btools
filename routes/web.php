@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Resources\DetailMoveResources;
 use App\Http\Resources\MoveItemResources;
 use App\Http\Resources\StockResources;
 use App\Models\Item;
@@ -19,7 +20,7 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    return StockResources::collection(Item::with('warehouses')->get());
+    return DetailMoveResources::collection(TransferDetails::with('headers')->where('item_id', 100314)->get());
 });
 
 // Auth::routes();

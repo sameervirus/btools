@@ -43,7 +43,9 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('orders/move', [OrderController::class, 'move']);
     Route::post('orders/purchase', [OrderController::class, 'purchase']);
     Route::post('orders/transfer', [OrderController::class, 'transfer']);
-    Route::get('movements/{trans}', [OrderController::class, 'item']);
+    Route::get('movements/{trans}', [OrderController::class, 'trans']);
+    Route::get('storage', [OrderController::class, 'storage']);
+    Route::get('item/{code}', [OrderController::class, 'item']);
 });
 
 

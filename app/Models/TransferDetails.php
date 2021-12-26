@@ -18,4 +18,9 @@ class TransferDetails extends Model
     {
         return $this->belongsTo(Item::class, 'item_id');
     }
+
+    public function header()
+    {
+        return $this->belongsTo(TransferHeader::class, 'transfer_header_id');
+    }
 }
