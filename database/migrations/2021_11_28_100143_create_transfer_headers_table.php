@@ -18,12 +18,12 @@ class CreateTransferHeadersTable extends Migration
             $table->bigInteger('trans_no')->unique();
             $table->date('trans_date');
             $table->integer('qty');
-            $table->float('cost');
+            $table->float('cost', 12, 2);
             $table->text('comments')->nullable();
             $table->string('invo_no')->nullable();
             $table->date('invo_date')->nullable();
             $table->integer('from')->index()->nullable();
-            $table->integer('to')->index();
+            $table->integer('to')->index()->nullable();
             $table->integer('transfer_type_id')->index();
             $table->integer('user_id')->index();
             $table->integer('client_id')->index()->nullable();

@@ -64,19 +64,50 @@ class OrderController extends Controller
     public function move(Request $request, $id=null)
     {
         $request->validate([
-            'type' => 'required',
-            'warehouse' => 'required',
-            'from_warehouse' => 'required',            
+            'type' => 'required',           
             'trans_date' => 'required',
             'selectedItems' => 'required'
         ]);
 
-        if($request->type == 1) {
+        if(in_array($request->type, [1, 4])) {
             $request->validate([
                 'client' => 'required',
                 'invoiceNo' => 'required',
                 'invoiceDate' => 'required',
+                'warehouse' => 'required',
             ]);
+            if($request->type == 1) {
+                $from = null;
+                $to = $request->warehouse;
+            } else if($request->type == 4) {
+                $from = $request->warehouse;
+                $to = null;
+            }
+        }
+
+        if($request->type == 2) {
+            $request->validate([
+                'from_warehouse' => 'required',
+                'warehouse' => 'required',
+            ]);
+            $from = $request->from_warehouse;
+            $to = $request->warehouse;
+        }
+
+        if(in_array($request->type, [3])) {
+            $request->validate([
+                'warehouse' => 'required',
+            ]);
+            $from = $request->warehouse;
+            $to = $request->warehouse;
+        }
+
+        if(in_array($request->type, [5, 6])) {
+            $request->validate([
+                'warehouse' => 'required',
+            ]);
+            $from = $request->warehouse;
+            $to = null;
         }
 
         if(!$request->isUpdate) {
@@ -99,8 +130,8 @@ class OrderController extends Controller
                 $request->comments, 
                 $request->invoiceNo, 
                 $request->invoiceDate, 
-                $request->from_warehouse, 
-                $request->warehouse, 
+                $from, 
+                $to, 
                 $request->type, 
                 auth()->user()->id, 
                 $request->client, 
@@ -117,8 +148,8 @@ class OrderController extends Controller
                 $request->comments, 
                 $request->invoiceNo, 
                 $request->invoiceDate, 
-                $request->from_warehouse, 
-                $request->warehouse, 
+                $from, 
+                $to, 
                 $request->type, 
                 auth()->user()->id, 
                 $request->client, 

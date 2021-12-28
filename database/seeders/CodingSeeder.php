@@ -21,10 +21,12 @@ class CodingSeeder extends Seeder
     {
                 
         TransferType::create(['name' => 'المشتريات']);
+        TransferType::create(['name' => 'نقل']);
         TransferType::create(['name' => 'تكوين سلعى']);
         TransferType::create(['name' => 'مردودات مشتريات']);
         TransferType::create(['name' => 'مبيعات']);
-        TransferType::create(['name' => 'نقل']);
+        TransferType::create(['name' => 'اهلاك']);
+        
 
         Category::create(['slug' => Str::slug('اخرى'),'name' => 'اخرى']);
         Category::create(['slug' => Str::slug('ادوات كهربائية'),'name' => 'ادوات كهربائية']);
@@ -54,14 +56,9 @@ class CodingSeeder extends Seeder
         Unit::create(['slug' => Str::slug('لتر'),'name' => 'لتر']);
 
         Client::create(['slug' => Str::slug('غير معروف'),'name' => 'غير معروف']);
-        Warehouse::create(['slug' => Str::slug('المشتريات'),'name' => 'المشتريات']);
-        Warehouse::create(['slug' => Str::slug('تكوين سلعى'),'name' => 'تكوين سلعى']);
-        Warehouse::create(['slug' => Str::slug('تشغيل'),'name' => 'تشغيل']);
         Warehouse::create(['slug' => Str::slug('مخزن رئيسى'),'name' => 'مخزن رئيسى']);
         Warehouse::create(['slug' => Str::slug('مخزن الخشب'),'name' => 'مخزن الخشب']);
         Warehouse::create(['slug' => Str::slug('مخزن الحديد'),'name' => 'مخزن الحديد']);
-        Warehouse::create(['slug' => Str::slug('مردودات مشتريات'),'name' => 'مردودات مشتريات']);
-        Warehouse::create(['slug' => Str::slug('مبيعات'),'name' => 'مبيعات']);
         Warehouse::create(['slug' => Str::slug('مخزن العلمين'),'name' => 'مخزن العلمين']);
         Warehouse::create(['slug' => Str::slug('مخزن ورشه احمد ماهر'),'name' => 'مخزن ورشه احمد ماهر']);
         Warehouse::create(['slug' => Str::slug('م- عاطف'),'name' => 'م- عاطف']);

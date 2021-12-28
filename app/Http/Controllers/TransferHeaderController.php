@@ -36,17 +36,21 @@ class TransferHeaderController extends Controller
                     'cost' => $item['price']
                 ]);
 
-                if($transfer_type_id == 5) {
+                // Deduct from warehouse
+                if(in_array($transfer_type_id, [2, 4, 5, 6])) {
                     DB::table('item_warehouse')->updateOrInsert(
                         ['item_id' => $item['id'], 'warehouse_id' => $from],
                         ['qty' => DB::raw('qty - '. $item['qty'] .' ')]
                     );
                 }
 
-                DB::table('item_warehouse')->updateOrInsert(
-                    ['item_id' => $item['id'], 'warehouse_id' => $to],
-                    ['qty' => DB::raw('qty+ '. $item['qty'] .' ')]
-                );
+                // Add to warehouse
+                if(in_array($transfer_type_id, [1, 2, 3])) {
+                    DB::table('item_warehouse')->updateOrInsert(
+                        ['item_id' => $item['id'], 'warehouse_id' => $to],
+                        ['qty' => DB::raw('qty+ '. $item['qty'] .' ')]
+                    );
+                }
             }
             DB::commit();
         } else {
